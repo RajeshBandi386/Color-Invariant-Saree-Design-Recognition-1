@@ -167,4 +167,4 @@ python inference.py search \
 | **Verification (1:1)** | **Equal Error Rate (EER)** | Identifies the balanced operating point where False Acceptance (FMR) equals False Rejection (FNMR). |
 | **Verification (1:1)** | **Optimal Cosine Threshold ($\tau^* \approx 0.65$)** | Calibrated operational cut-off for automated matching. |
 
-APPLINK: color-invariant-saree-design-recognition.ai.studio
+APPLINK: https://color-invariant-saree-design-recognition-1.ai.studio
