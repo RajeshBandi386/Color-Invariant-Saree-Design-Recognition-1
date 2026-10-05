@@ -1,0 +1,72 @@
+version: '3.8'
+
+services:
+  # Primary Web Application & REST API
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: saree-recognition-web
+    restart: unless-stopped
+    ports:
+      - "5000:5000"
+    environment:
+      - PORT=5000
+      - FLASK_ENV=production
+      - PYTHONUNBUFFERED=1
+    volumes:
+      - ./data:/app/data
+      - ./outputs:/app/outputs
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/api/status"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    deploy:
+      resources:
+        limits:
+          cpus: '4.0'
+          memory: 4G
+        reservations:
+          cpus: '1.0'
+          memory: 1G
+
+  # One-off Training Container Task
+  trainer:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: saree-recognition-trainer
+    entrypoint: ["python", "train.py"]
+    command: ["--backbone", "convnext_tiny", "--epochs", "15", "--batch_size", "32", "--data_dir", "./data/demo_sarees", "--mock"]
+    volumes:
+      - ./data:/app/data
+      - ./outputs:/app/outputs
+    environment:
+      - PYTHONUNBUFFERED=1
+
+  # Model Complexity & Efficiency Profiler
+  benchmark:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: saree-recognition-benchmark
+    entrypoint: ["python", "efficiency_benchmark.py"]
+    volumes:
+      - ./outputs:/app/outputs
+    environment:
+      - PYTHONUNBUFFERED=1
+
+  # Full End-to-End Pipeline Demonstration
+  demo:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: saree-recognition-demo
+    entrypoint: ["python", "run_demo.py"]
+    volumes:
+      - ./data:/app/data
+      - ./outputs:/app/outputs
+    environment:
+      - PYTHONUNBUFFERED=1

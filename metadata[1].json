@@ -1,0 +1,6 @@
+{
+  "name": "Color-Invariant Saree Design Recognition",
+  "description": "Deep metric learning platform with containerized architecture for recognizing saree surface motifs across diverse colorways using ConvNeXt and ArcFace.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
